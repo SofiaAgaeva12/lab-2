@@ -13,13 +13,12 @@ def signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.refresh_from_db()
             user.save()
-            fullname = form.cleaned_data.get('fullname')
+            first_name = form.cleaned_data.get('first_name')
             raw_password = form.cleaned_data.get('password1')
             log = form.cleaned_data.get('username')
             user = authenticate(username=log, password=raw_password)
-            login(request, user, fullname)
+            login(request, user, first_name)
             return redirect('home')
     else:
         form = SignupForm()

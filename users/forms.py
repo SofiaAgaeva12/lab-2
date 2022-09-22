@@ -7,14 +7,19 @@ from django.core.validators import RegexValidator
 class SignupForm(UserCreationForm):
     LetterValidator = RegexValidator(r'^[- а-яА-Я]*$')
     LoginValidator = RegexValidator(r'^[- a-zA-Z]*$')
-    username = forms.CharField(max_length=120, required=True, help_text='Enter a short name in English')
-    fullname = forms.CharField(max_length=120, validators=[LetterValidator], required=True,
-                               help_text='Required. Only cyrillic letters, "-" and " ".')
-    email = forms.EmailField(max_length=120, help_text='Enter a valid email.', required=True,)
-    login = forms.CharField(max_length=30, validators=[LoginValidator], required=True,
-                            help_text='Required. Only latin letters and "-".')
-    agreement = forms.BooleanField(initial=True, help_text='Consent to the processing of personal data')
+
+    first_name = forms.CharField(max_length=120, validators=[LetterValidator], required=True,
+                               help_text='Required. Only cyrillic letters, "-" and " ".',
+                               label='ФИО')
+    username = forms.CharField(max_length=30, validators=[LoginValidator], required=True,
+                               help_text='Required. Only latin letters and "-".',
+                               label='Логин')
+    email = forms.EmailField(max_length=120, help_text='Enter a valid email.', required=True,
+                             label='Email')
+    password1 = forms.CharField(max_length=200, label='Пароль')
+    password2 = forms.CharField(max_length=200, label='Повтор пароля')
+    agreement = forms.BooleanField(initial=True, help_text='Согласие на обработку персональных данных')
 
     class Meta:
         model = User
-        fields = ('username', 'fullname', 'login', 'email', 'password1', 'password2')
+        fields = ('first_name', 'username', 'email', 'password1', 'password2')
