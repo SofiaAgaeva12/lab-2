@@ -4,11 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <title>User Authentication System</title>
-    
-    {% block style %}
-    {% endblock style %}
+    <link rel="stylesheet" href="">
+    <title>Home page</title>
 </head>
+
+{% block style %}
+     <style>
+        h1 {
+            text-align: center;
+        }
+        a {
+            display: inline-block;
+            border: 0;
+            border-radius: 6px;
+            text-align: center;
+            padding: 15px 25px;
+            line-height: 1;
+            text-decoration: none;
+        }
+        .a2 {
+            margin-left: 1em;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+        }
+    </style>
+{% endblock style %}
+
 <body>
     <div class="container">
         {% block content %}
