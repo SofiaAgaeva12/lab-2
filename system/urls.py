@@ -21,18 +21,21 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
 from users.views import RecordCreate
-from users.views import UserMainPage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('catalog/', user_views.home, name='home'),
+
     path('signup/', user_views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name="users/logout.html"), name='logout'),
-    path('record/', RecordCreate.as_view(template_name="users/record_create.html"), name='record-create'),
-    path('main/', UserMainPage.as_view(template_name="users/main.html"), name='main-page'),
+
+    path('record-create/', RecordCreate.as_view(template_name="users/record_create.html"), name='record-create'),
 ]
 
-
+urlpatterns += [
+    path('my-records/', user_views.LoanedRecordsByUserListView.as_view(), name='my-records'),
+    path('main/', user_views.main, name='main-page'),
+]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

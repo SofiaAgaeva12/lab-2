@@ -30,15 +30,21 @@ def signup(request):
 
 
 from django.views.generic import CreateView
+from django.views.generic import ListView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class RecordCreate(CreateView):
     model = Record
+    fields = ['title', 'summary', 'category', 'image']
 
 
-from django.views.generic import ListView
+class LoanedRecordsByUserListView(PermissionRequiredMixin, ListView):
+    model = Record
+    # permission_required = 'catalog.can_mark_returned'
+    template_name = 'users/record_list_borrowed_all.html'
 
 
-class UserMainPage(ListView):
-    model = Record,
-    paginate_by = 4
+def main(request):
+    data = Record.objects.all()
+    return render(request, 'users/main.html', {'data': data})

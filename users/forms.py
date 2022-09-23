@@ -5,8 +5,8 @@ from django.core.validators import RegexValidator
 
 
 class SignupForm(UserCreationForm):
-    LetterValidator = RegexValidator(r'^[- а-яА-Я]*$')
-    LoginValidator = RegexValidator(r'^[- a-zA-Z]*$')
+    LetterValidator = RegexValidator(r'^[ ]?[- а-яА-Я]*$')
+    LoginValidator = RegexValidator(r'^[-a-zA-Z]*$')
 
     first_name = forms.CharField(max_length=120, validators=[LetterValidator], required=True,
                                  help_text='Required. Only cyrillic letters, "-" and " ".',

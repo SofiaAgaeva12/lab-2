@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-
+from django.views.generic import CreateView
+import datetime
 
 class Category(models.Model):
     """
@@ -27,6 +28,8 @@ class Record(models.Model):
 
     category = models.ManyToManyField(Category, help_text="Select a genre for this book")
     image = models.ImageField(upload_to='media/images/%Y-%m-%d/')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True,
+                                      verbose_name='Опубликовано')
 
     LOAN_STATUS = (
         ('n', 'Новая'),
@@ -41,6 +44,16 @@ class Record(models.Model):
         default='n',
         help_text='Record availability')
 
+    def delete(self, *args, **kwargs):
+        for ai in self.additionalimage_set.all():
+            ai.delete()
+        super().delete(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = 'Заявки'
+        verbose_name = 'Заявка'
+        ordering = ['-created_at']
+
     def __str__(self):
         """
         String for representing the Model object.
@@ -52,3 +65,15 @@ class Record(models.Model):
         Returns the url to access a particular record.
         """
         return reverse('record-detail', args=[str(self.id)])
+
+
+from .utilities import get_timestamp_path
+
+
+class AdditionalImage(models.Model):
+    bb = models.ForeignKey(Record, on_delete=models.CASCADE, verbose_name='Заявки')
+    image = models.ImageField(upload_to=get_timestamp_path, verbose_name='Заявка')
+
+    class Meta:
+        verbose_name_plural = 'Дополнительные иллюстрации'
+        verbose_name = 'Дополнительная иллюстрация'

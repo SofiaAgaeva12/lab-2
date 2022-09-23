@@ -1,11 +1,12 @@
 
-{% extends "base.html" %}
+{% extends "users/base.html" %}
 
 {% block content %}
+<h1>Create Record</h1>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <!-- Выводим каждое поле формы в отдельном параграфе -->
-    {{ form.as_p }}
-    <button type="submit">Загрузка</button>
+    <div style="">{{ form.as_p }}</div>
+    <button type="submit">Загрузить</button>
 </form>
 {% endblock %}

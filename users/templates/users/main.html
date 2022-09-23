@@ -1,0 +1,14 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <h1>Records</h1>
+<div style="display: flex; gap: 30px">{% for r in data %}
+   <div style="">
+       <h2><a href="{{ r.record.url }}">{{ r.title }}</a></h2>
+       <p>{{ r.category }}</p>
+       <img src="{{ r.image.url }}">
+   </div>
+    {% endfor %}</div>
+
+
+{% endblock %}
