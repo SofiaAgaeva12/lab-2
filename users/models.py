@@ -23,8 +23,11 @@ class Profile(models.Model):
 class Record(models.Model):
     title = models.CharField(max_length=100)
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the record")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     category = models.ManyToManyField(Category, help_text="Select a genre for this book")
     image = models.ImageField(upload_to='media/images/%Y-%m-%d/')
+
     LOAN_STATUS = (
         ('n', 'Новая'),
         ('p', 'Выполнено'),

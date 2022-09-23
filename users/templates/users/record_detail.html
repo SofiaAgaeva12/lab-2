@@ -1,0 +1,10 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+
+    {% for b in data %}
+    <a href="{{ b.record.url }}">{{ b.title }}</a>
+    <img src="{{ b.image.url }}">
+    {% endfor %}
+
+{% endblock %}

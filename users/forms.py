@@ -9,8 +9,8 @@ class SignupForm(UserCreationForm):
     LoginValidator = RegexValidator(r'^[- a-zA-Z]*$')
 
     first_name = forms.CharField(max_length=120, validators=[LetterValidator], required=True,
-                               help_text='Required. Only cyrillic letters, "-" and " ".',
-                               label='ФИО')
+                                 help_text='Required. Only cyrillic letters, "-" and " ".',
+                                 label='ФИО')
     username = forms.CharField(max_length=30, validators=[LoginValidator], required=True,
                                help_text='Required. Only latin letters and "-".',
                                label='Логин')
