@@ -20,7 +20,6 @@ from django.contrib.auth import views as auth_views
 
 from django.conf.urls.static import static
 from django.conf import settings
-from users.views import RecordCreate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +29,8 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name="users/logout.html"), name='logout'),
 
-    path('record-create/', RecordCreate.as_view(template_name="users/record_create.html"), name='record-create'),
+    path('record-create/', user_views.RecordCreate.as_view(template_name='users/record_create.html'),
+         name='record-create'),
 ]
 
 urlpatterns += [

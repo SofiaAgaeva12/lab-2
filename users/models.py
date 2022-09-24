@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views.generic import CreateView
 import datetime
 
+
 class Category(models.Model):
     """
     Model representing a category of record (e.g. ).
@@ -24,7 +25,7 @@ class Profile(models.Model):
 class Record(models.Model):
     title = models.CharField(max_length=100)
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the record")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False)
 
     category = models.ManyToManyField(Category, help_text="Select a genre for this book")
     image = models.ImageField(upload_to='media/images/%Y-%m-%d/')
@@ -45,7 +46,7 @@ class Record(models.Model):
         help_text='Record availability')
 
     def delete(self, *args, **kwargs):
-        for ai in self.additionalimage_set.all():
+        for ai in self.additionalimage.all():
             ai.delete()
         super().delete(*args, **kwargs)
 
