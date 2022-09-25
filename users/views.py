@@ -8,6 +8,7 @@ from .forms import SignupForm
 from .models import Record
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
+from .filters import RecordFilter
 
 
 def home(request):
@@ -15,19 +16,17 @@ def home(request):
     return render(request, 'users/home.html', {'data': data})
 
 
-@login_required
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
+
             first_name = form.cleaned_data.get('first_name')
-            # raw_password = form.cleaned_data.get('password1')
-            # log = form.cleaned_data.get('username')
-            stock = form.save(commit=False)
-            stock.user = request.user
-            stock.save()
-            login(request, stock.user, first_name)
+            raw_password = form.cleaned_data.get('password1')
+            log = form.cleaned_data.get('username')
+            user = authenticate(username=log, password=raw_password)
+            login(request, user, first_name)
             return redirect('home')
     else:
         form = SignupForm()
@@ -44,7 +43,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 class RecordCreate(CreateView):
     model = Record
     fields = ['title', 'summary', 'category', 'image']
-    success_url = reverse_lazy('main-page')
+    success_url = reverse_lazy('my-records')
 
     # Функция для кастомной валидации полей формы модели
     def form_valid(self, form):
@@ -59,16 +58,17 @@ class RecordCreate(CreateView):
 
 class LoanedRecordsByUserListView(PermissionRequiredMixin, ListView):
     model = Record
-    # permission_required = 'catalog.can_mark_returned'
-    template_name = 'users/record_list_borrowed_all.html'
+    template_name='users/record_list_user_all.html'
+    # paginate_by = 4
 
+    def get_queryset(self):
+        return Record.objects.filter(orderer=self.request.user).order_by('date')
 
-# def detail(request, rubric_pk, pk):
-#     bb = get_object_or_404(Record, pk=pk)
-#     ais = bb.additionalimage_set.all()
-#     context = {'bb': bb, 'ais': ais}
-#     return render(request, 'main/detail.html', context)
-#
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs,)
+        context['filter'] = RecordFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
 
 def main(request):
     data = Record.objects.all()

@@ -29,12 +29,13 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name="users/logout.html"), name='logout'),
 
-    path('record-create/', user_views.RecordCreate.as_view(template_name='users/record_create.html'),
-         name='record-create'),
 ]
 
 urlpatterns += [
-    path('my-records/', user_views.LoanedRecordsByUserListView.as_view(), name='my-records'),
+    path('record-create/', user_views.RecordCreate.as_view(template_name='users/record_create.html'),
+         name='record-create'),
+    path('my-records/', user_views.LoanedRecordsByUserListView.as_view(),
+         name='my-records'),
     path('main/', user_views.main, name='main-page'),
 ]
 if settings.DEBUG:
