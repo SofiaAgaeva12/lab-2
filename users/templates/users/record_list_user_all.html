@@ -1,10 +1,19 @@
 {% extends 'users/base.html' %}
 
+{% load bootstrap %}
+
 {% block content %}
+<form method="GET">
+    {{ filter.form|bootstrap }}
+    <button type="submit" class="btn btn-primary">Фильтр</button>
+</form>
+
 <h1>Records</h1>
-<div style="display: flex; gap: 30px">{% for r in data %}
+
+<div style="display: flex; gap: 30px">{% for r in filter.qs %}
     <div style="">
         <h2><a href="{{ r.record.url }}">{{ r.title }}</a></h2>
+        <p>{{ r.created_at }}</p>
         {% for doc in r.category.all %}
         <p>{{doc.name}}</p>
         {% endfor %}

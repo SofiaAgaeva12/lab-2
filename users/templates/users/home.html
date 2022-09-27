@@ -17,6 +17,7 @@
             <a class="a2" href="{% url 'logout' %} ">Logout</a>
             <a class="a2" href="{% url 'main-page' %}">Главная cтраница</a>
             <a class="a2" href="{% url 'record-create' %}">Создать заявку</a>
+            <a class="a2" href="{% url 'my-records' %}">Мои заявки</a>
         {% else %}
             <a class="a1" href="{% url  'signup' %}">Sign Up</a>
             <a class="a2" href="{% url 'login' %}">Login</a>

@@ -37,7 +37,7 @@ def signup(request):
 
 from django.views.generic import CreateView
 from django.views.generic import ListView
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
 
 class RecordCreate(CreateView):
@@ -56,13 +56,13 @@ class RecordCreate(CreateView):
         return super().form_valid(form)
 
 
-class LoanedRecordsByUserListView(PermissionRequiredMixin, ListView):
+class LoanedRecordsByUserListView(LoginRequiredMixin, ListView):
     model = Record
-    template_name='users/record_list_user_all.html'
+    template_name = 'users/record_list_user_all.html'
     # paginate_by = 4
 
     def get_queryset(self):
-        return Record.objects.filter(orderer=self.request.user).order_by('date')
+        return Record.objects.filter(user=self.request.user).order_by('created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs,)

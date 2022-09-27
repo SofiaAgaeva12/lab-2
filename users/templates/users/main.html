@@ -5,6 +5,7 @@
 <div style="display: flex; gap: 30px">{% for r in data %}
     <div style="">
         <h2><a href="{{ r.record.url }}">{{ r.title }}</a></h2>
+        <p>{{ r.created_at }}</p>
         {% for doc in r.category.all %}
         <p>{{doc.name}}</p>
         {% endfor %}
