@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
@@ -35,15 +36,27 @@ def signup(request):
     return render(request, 'users/signup.html', context)
 
 
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+
+
+class RecordDetailView(DeleteView):
+    model = Record
+
+    def record_detail_view(request, pk):
+        try:
+            record_id = Record.objects.get(pk=pk)
+        except Record.DoesNotExist:
+            raise Http404("Record does not exist")
+
+        return render(request, 'users/record_detail.html', context={'record': record_id, })
 
 
 class RecordCreate(CreateView):
     model = Record
     fields = ['title', 'summary', 'category', 'image']
-    success_url = reverse_lazy('my-records')
+    success_url = reverse_lazy('record-detail')
 
     # Функция для кастомной валидации полей формы модели
     def form_valid(self, form):
@@ -56,16 +69,22 @@ class RecordCreate(CreateView):
         return super().form_valid(form)
 
 
+class RecordDelete(DeleteView):
+    model = Record
+    success_url = reverse_lazy('my-records')
+
+
 class LoanedRecordsByUserListView(LoginRequiredMixin, ListView):
     model = Record
     template_name = 'users/record_list_user_all.html'
+
     # paginate_by = 4
 
     def get_queryset(self):
         return Record.objects.filter(user=self.request.user).order_by('created_at')
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs,)
+        context = super().get_context_data(**kwargs, )
         context['filter'] = RecordFilter(self.request.GET, queryset=self.get_queryset())
         return context
 

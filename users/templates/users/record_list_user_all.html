@@ -1,10 +1,10 @@
 {% extends 'users/base.html' %}
 
-{% load bootstrap %}
+
 
 {% block content %}
 <form method="GET">
-    {{ filter.form|bootstrap }}
+    {{ filter.form }}
     <button type="submit" class="btn btn-primary">Фильтр</button>
 </form>
 
@@ -21,6 +21,5 @@
     </div>
     {% endfor %}
 </div>
-
 
 {% endblock %}
