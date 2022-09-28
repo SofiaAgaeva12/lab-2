@@ -36,27 +36,28 @@ def signup(request):
     return render(request, 'users/signup.html', context)
 
 
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView, DetailView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
 
-class RecordDetailView(DeleteView):
+class RecordDetailView(DetailView):
     model = Record
+    template_name = 'users/record_detail.html'
 
-    def record_detail_view(request, pk):
-        try:
-            record_id = Record.objects.get(pk=pk)
-        except Record.DoesNotExist:
-            raise Http404("Record does not exist")
-
-        return render(request, 'users/record_detail.html', context={'record': record_id, })
+    # def record_detail_view(request, pk):
+    #     try:
+    #         record_id = Record.objects.get(pk=pk)
+    #     except Record.DoesNotExist:
+    #         raise Http404("Record does not exist")
+    #
+    #     return render(request, 'users/record_detail.html', context={'record': record_id, })
 
 
 class RecordCreate(CreateView):
     model = Record
     fields = ['title', 'summary', 'category', 'image']
-    success_url = reverse_lazy('record-detail')
+    success_url = reverse_lazy('my-records')
 
     # Функция для кастомной валидации полей формы модели
     def form_valid(self, form):
@@ -72,13 +73,23 @@ class RecordCreate(CreateView):
 class RecordDelete(DeleteView):
     model = Record
     success_url = reverse_lazy('my-records')
+    template_name = 'users/record_delete.html'
+
+    def get_object(self, queryset=None):
+        """
+        Check the logged in user is the owner of the object or 404
+        """
+        obj = super(RecordDelete, self).get_object(queryset)
+        if obj.user != self.request.user:
+            raise Http404(
+                "You don't own this object"
+            )
+        return obj
 
 
 class LoanedRecordsByUserListView(LoginRequiredMixin, ListView):
     model = Record
     template_name = 'users/record_list_user_all.html'
-
-    # paginate_by = 4
 
     def get_queryset(self):
         return Record.objects.filter(user=self.request.user).order_by('created_at')

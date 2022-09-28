@@ -1,7 +1,5 @@
 {% extends 'users/base.html' %}
 
-
-
 {% block content %}
 <form method="GET">
     {{ filter.form }}
@@ -10,9 +8,9 @@
 
 <h1>Records</h1>
 
-<div style="display: flex; gap: 30px">{% for r in filter.qs %}
+<div style="display: flex; gap: 30px; flex-wrap: wrap">{% for r in filter.qs %}
     <div style="">
-        <h2><a href="{{ r.record.url }}">{{ r.title }}</a></h2>
+        <h2><a href="{% url 'record-detail' r.pk %}">{{ r.title }}</a></h2>
         <p>{{ r.created_at }}</p>
         {% for doc in r.category.all %}
         <p>{{doc.name}}</p>

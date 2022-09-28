@@ -23,7 +23,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', user_views.home, name='home'),
+    path('catalog/', user_views.home, name='home'),
 
     path('signup/', user_views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
@@ -32,11 +32,11 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path(r'^record/(?P<pk>\d+)$', user_views.RecordDetailView.as_view(template_name='users/record_detail.html'),
+    path('record/<int:pk>', user_views.RecordDetailView.as_view(template_name='users/record_detail.html'),
          name='record-detail'),
-    path(r'^record/create/$', user_views.RecordCreate.as_view(template_name='users/record_create.html'),
+    path('create/', user_views.RecordCreate.as_view(template_name='users/record_create.html'),
          name='record-create'),
-    path(r'^record/(?P<pk>\d+)/delete/$', user_views.RecordDelete.as_view(template_name='users/record_delete.html'),
+    path('record/<int:pk>/delete', user_views.RecordDelete.as_view(template_name='users/record_delete.html'),
          name='record-delete'),
     path('my-records/', user_views.LoanedRecordsByUserListView.as_view(),
          name='my-records'),

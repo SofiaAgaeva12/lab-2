@@ -45,10 +45,10 @@ class Record(models.Model):
         default='n',
         help_text='Record availability')
 
-    def delete(self, *args, **kwargs):
-        for ai in self.additionalimage.all():
-            ai.delete()
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     for ai in self.additionalimage.all():
+    #         ai.delete()
+    #     super().delete(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Заявки'
@@ -71,10 +71,10 @@ class Record(models.Model):
 from .utilities import get_timestamp_path
 
 
-class AdditionalImage(models.Model):
-    bb = models.ForeignKey(Record, on_delete=models.CASCADE, verbose_name='Заявки')
-    image = models.ImageField(upload_to=get_timestamp_path, verbose_name='Заявка')
-
-    class Meta:
-        verbose_name_plural = 'Дополнительные иллюстрации'
-        verbose_name = 'Дополнительная иллюстрация'
+# class AdditionalImage(models.Model):
+#     bb = models.ForeignKey(Record, on_delete=models.CASCADE, verbose_name='Заявки')
+#     image = models.ImageField(upload_to=get_timestamp_path, verbose_name='Заявка')
+#
+#     class Meta:
+#         verbose_name_plural = 'Дополнительные иллюстрации'
+#         verbose_name = 'Дополнительная иллюстрация'
