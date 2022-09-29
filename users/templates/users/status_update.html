@@ -1,0 +1,17 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+
+    <div class="center">
+        {% if user.is_staff %}
+            <h1>Change status</h1>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div style="">{{ form.as_p }}</div>
+    <button type="submit">Загрузить</button>
+</form>
+
+        {% endif %}
+    </div>
+
+{% endblock content %}

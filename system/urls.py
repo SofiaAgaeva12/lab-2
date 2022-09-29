@@ -40,7 +40,13 @@ urlpatterns += [
          name='record-delete'),
     path('my-records/', user_views.LoanedRecordsByUserListView.as_view(),
          name='my-records'),
-    path('main/', user_views.main, name='main-page'),
+    path('main/', user_views.MainView.as_view(), name='main-page'),
 ]
+
+urlpatterns += [
+    path('all-records/', user_views.AllRecordsView.as_view(), name='all-records'),
+    path('record/<int:pk>/update-status', user_views.StatusUpdate.as_view, name='update-status')
+]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

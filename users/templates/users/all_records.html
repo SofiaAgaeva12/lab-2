@@ -1,16 +1,9 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-
 <h1>Records</h1>
-<h4><a class="a2" href="{% url 'main-page' %}">Главная</a></h4>
-<form method="GET">
-    {{ filter.form }}
-    <button type="submit" class="btn btn-primary">Фильтр</button>
-</form>
-
-<div style="display: flex; gap: 30px; flex-wrap: wrap">{% for r in filter.qs %}
-    <div style="">
+<div style="display: flex; gap: 40px; flex-wrap: wrap">{% for r in data %}
+    <div>
         <h2><a href="{% url 'record-detail' r.pk %}">{{ r.title }}</a></h2>
         <p>{{ r.created_at }}</p>
         {% for doc in r.category.all %}

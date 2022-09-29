@@ -54,6 +54,7 @@ class Record(models.Model):
         verbose_name_plural = 'Заявки'
         verbose_name = 'Заявка'
         ordering = ['-created_at']
+        permissions = (("can_mark_returned", "Set record as returned"),)
 
     def __str__(self):
         """

@@ -1,12 +1,17 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
+
  <div style="">
         <h1>>{{ record.title }}</h1>
         <p>{{record.summary}}</p>
         <img src="{{ record.image.url }}">
      <p>{{ record.created_at }}</p>
+     <a href="{{record.pk}}/update-status">Update status</a>
     </div>
-
+{% if record.status == 'n' %}
     <a href="{{record.pk}}/delete">Удалить заявку?</a>
+{% else %}
+<p>Заявка принята в работу или выполнена.</p>
+{% endif %}
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Records</h1>
 <div style="display: flex; gap: 40px; flex-wrap: wrap">{% for r in data %}
-    <div style="">
+    <div>
         <h2><a href="{% url 'record-detail' r.pk %}">{{ r.title }}</a></h2>
         <p>{{ r.created_at }}</p>
         {% for doc in r.category.all %}
@@ -14,5 +14,7 @@
     {% endfor %}
 </div>
 
-
+<div style="margin-top: 50px">
+    <p>Количество заявок, принятых в работу: {{ counter }}</p>
+</div>
 {% endblock %}

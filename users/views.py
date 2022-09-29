@@ -36,7 +36,7 @@ def signup(request):
     return render(request, 'users/signup.html', context)
 
 
-from django.views.generic import CreateView, DeleteView, DetailView
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
@@ -55,19 +55,32 @@ class RecordDetailView(DetailView):
 
 
 class RecordCreate(CreateView):
+
     model = Record
     fields = ['title', 'summary', 'category', 'image']
     success_url = reverse_lazy('my-records')
 
-    # Функция для кастомной валидации полей формы модели
     def form_valid(self, form):
-        # создаем форму, но не отправляем его в БД, пока просто держим в памяти
+
         fields = form.save(commit=False)
-        # Через реквест передаем недостающую форму, которая обязательна
         fields.user = self.request.user
-        # Наконец сохраняем в БД
         fields.save()
         return super().form_valid(form)
+
+
+class StatusUpdate(UpdateView):
+    model = Record
+    template_name = 'users/status_update.html'
+    fields = ['status']
+
+    success_url = reverse_lazy('all-records')
+    #
+    # def form_valid(self, form):
+    #
+    #     fields = form.save(commit=False)
+    #     fields.user = self.request.user
+    #     fields.save()
+    #     return super().form_valid(form)
 
 
 class RecordDelete(DeleteView):
@@ -79,12 +92,13 @@ class RecordDelete(DeleteView):
         """
         Check the logged in user is the owner of the object or 404
         """
-        obj = super(RecordDelete, self).get_object(queryset)
-        if obj.user != self.request.user:
-            raise Http404(
-                "You don't own this object"
-            )
-        return obj
+        record = super(RecordDelete, self).get_object(queryset)
+        if record.status == 'n':
+            if record.user != self.request.user:
+                raise Http404(
+                    "You don't own this object"
+                )
+            return record
 
 
 class LoanedRecordsByUserListView(LoginRequiredMixin, ListView):
@@ -100,6 +114,41 @@ class LoanedRecordsByUserListView(LoginRequiredMixin, ListView):
         return context
 
 
-def main(request):
+def main_context():
+    counter = Record.objects.filter(status='a').count()
     data = Record.objects.all()
-    return render(request, 'users/main.html', {'data': data})
+    context = {'data': data, 'counter': counter}
+    return context
+
+
+class MainView(ListView):
+
+    model = Record
+    template_name = 'users/main.html'
+    paginate_by = 4
+
+    def get_queryset(self):
+        return Record.objects.order_by('created_at')
+
+    def get_context_data(self, **kwargs):
+        counter = Record.objects.filter(status='a').count()
+        data = Record.objects.all()
+        context = {'data': data, 'counter': counter}
+        return context
+
+
+class AllRecordsView(ListView):
+
+    model = Record
+    template_name = 'users/all_records.html'
+
+    def get_queryset(self, **kwargs):
+        return Record.objects.order_by('created_at')
+
+    def get_context_data(self, **kwargs):
+        data = Record.objects.all()
+        context = {'data': data}
+        return context
+
+
+
