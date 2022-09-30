@@ -70,18 +70,17 @@ class RecordCreate(CreateView):
 
 class StatusUpdate(UpdateView):
     model = Record
+    fields = ['status', 'images']
     template_name = 'users/status_update.html'
-    fields = ['status']
-
     success_url = reverse_lazy('all-records')
-    #
-    # def form_valid(self, form):
-    #
-    #     fields = form.save(commit=False)
-    #     fields.user = self.request.user
-    #     fields.save()
-    #     return super().form_valid(form)
 
+
+class CategoryCreate:
+    pass
+
+
+class CategoryDelete:
+    pass
 
 class RecordDelete(DeleteView):
     model = Record
@@ -149,6 +148,5 @@ class AllRecordsView(ListView):
         data = Record.objects.all()
         context = {'data': data}
         return context
-
 
 
