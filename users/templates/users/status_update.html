@@ -3,19 +3,32 @@
 {% block content %}
 
     <div class="center">
+<h1>Change status</h1>
         {% if user.is_staff %}
-            <h1>Change status</h1>
-        {% if record.status == 'n' %}
-<form method="POST" enctype="multipart/form-data">
+
+
+            <div style="display: flex; flex-direction: column">
+
+            <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div style="margin-top: 150px">{{ form.as_p }}</div>
-    <button type="submit">Загрузить</button>
+            {% if record.status == 'n' %}
+            {{ form.status }}
+            <button type="submit">Загрузить</button>
+                {% else %}
+        <p>Нельзя сменить статус с «Принято в работу» или «Выполнено»</p>
+                {% endif %}
+               {{ form.comment }}
+
+                {{ form.add_image }}
+                <div><button type="submit" style="">Загрузить</button></div>
 </form>
-        {% else %}
-        <div style="margin-top: 150px"><p>Нельзя сменить статус с «Принято в работу» или «Выполнено»</p></div>
+
+
+
 
         {% endif %}
-        {% endif %}
     </div>
+        </div>
+
 
 {% endblock content %}

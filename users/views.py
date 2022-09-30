@@ -1,15 +1,16 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
 from .forms import SignupForm
-from .models import Record
+from .models import Record, Category
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 from .filters import RecordFilter
+from django.urls import reverse
 
 
 def home(request):
@@ -44,7 +45,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 class RecordDetailView(DetailView):
     model = Record
     template_name = 'users/record_detail.html'
-
     # def record_detail_view(request, pk):
     #     try:
     #         record_id = Record.objects.get(pk=pk)
@@ -61,26 +61,35 @@ class RecordCreate(CreateView):
     success_url = reverse_lazy('my-records')
 
     def form_valid(self, form):
-
         fields = form.save(commit=False)
         fields.user = self.request.user
         fields.save()
         return super().form_valid(form)
 
 
-class StatusUpdate(UpdateView):
+class StatusUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'users.can_mark_returned'
     model = Record
-    fields = ['status']
+    fields = ['status', 'comment', 'add_image']
     template_name = 'users/status_update.html'
-    success_url = reverse_lazy('all-records')
+
+    def get_field(self, form_class=None):
+        form = super(StatusUpdate, self).get_form(form_class)
+        form.fields['comment'].widget.attrs['style'] = 'resize: none;'
+        form.fields['add_image'].required = True
+        form.fields['comment'].required = True
+
+        return form
+    # success_url = reverse_lazy('update-status')
 
 
-class CategoryCreate:
-    pass
+class CategoryCreate(CreateView):
+    model = Category
+    template_name = 'create_category.html'
 
 
-class CategoryDelete:
-    pass
+class CategoryDelete(DeleteView):
+    model = Category
 
 
 class RecordDelete(DeleteView):
@@ -106,7 +115,7 @@ class LoanedRecordsByUserListView(LoginRequiredMixin, ListView):
     template_name = 'users/record_list_user_all.html'
 
     def get_queryset(self):
-        return Record.objects.filter(user=self.request.user).order_by('created_at')
+        return Record.objects.filter(user=self.request.user).Record_by('created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs, )
@@ -128,7 +137,7 @@ class MainView(ListView):
     paginate_by = 4
 
     def get_queryset(self):
-        return Record.objects.order_by('created_at')
+        return Record.objects.Record_by('created_at')
 
     def get_context_data(self, **kwargs):
         counter = Record.objects.filter(status='a').count()
@@ -143,7 +152,7 @@ class AllRecordsView(ListView):
     template_name = 'users/all_records.html'
 
     def get_queryset(self, **kwargs):
-        return Record.objects.order_by('created_at')
+        return Record.objects.Record_by('created_at')
 
     def get_context_data(self, **kwargs):
         data = Record.objects.all()

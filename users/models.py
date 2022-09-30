@@ -1,3 +1,4 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -28,10 +29,13 @@ class Record(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False)
 
     category = models.ManyToManyField(Category, help_text="Select a genre for this book")
-    image = models.ImageField(upload_to='media/images/%Y-%m-%d/')
+    image = models.ImageField(upload_to='media/images/%Y-%m-%d/',
+                              validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'bmp'])])
     created_at = models.DateTimeField(auto_now_add=True, db_index=True,
                                       verbose_name='Опубликовано')
 
+    comment = models.TextField(blank=True, help_text="Комментарий к записи")
+    add_image = models.ImageField(blank=True, upload_to='media/images/%Y-%m-%d/')
     LOAN_STATUS = (
         ('n', 'Новая'),
         ('p', 'Выполнено'),

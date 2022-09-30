@@ -3,8 +3,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
+from users.models import Record
+
 
 class SignupForm(UserCreationForm):
+
     LetterValidator = RegexValidator(r'^[ ]?[- а-яА-Я]*$')
     LoginValidator = RegexValidator(r'^[-a-zA-Z]*$')
 
