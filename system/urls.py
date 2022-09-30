@@ -46,8 +46,8 @@ urlpatterns += [
 urlpatterns += [
     path('all-records/', user_views.AllRecordsView.as_view(), name='all-records'),
     path('record/<int:pk>/update-status', user_views.StatusUpdate.as_view(), name='update-status'),
-    path('record/<int:pk>/create_category', user_views.CategoryCreate.as_view(), name='create_category'),
-    path('record/<int:pk>/delete_category', user_views.CategoryDelete.as_view(), name='delete_category')
+    # path('record/<int:pk>/create_category', user_views.CategoryCreate.as_view(), name='create_category'),
+    # path('record/<int:pk>/delete_category', user_views.CategoryDelete.as_view(), name='delete_category')
 ]
 
 if settings.DEBUG:

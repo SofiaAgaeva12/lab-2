@@ -27,7 +27,7 @@ class Record(models.Model):
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the record")
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False)
 
-    category = models.ManyToManyField(Category, help_text="Select a genre for this book", unique=True)
+    category = models.ManyToManyField(Category, help_text="Select a genre for this book")
     image = models.ImageField(upload_to='media/images/%Y-%m-%d/')
     created_at = models.DateTimeField(auto_now_add=True, db_index=True,
                                       verbose_name='Опубликовано')

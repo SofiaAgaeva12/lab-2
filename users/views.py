@@ -70,7 +70,7 @@ class RecordCreate(CreateView):
 
 class StatusUpdate(UpdateView):
     model = Record
-    fields = ['status', 'images']
+    fields = ['status']
     template_name = 'users/status_update.html'
     success_url = reverse_lazy('all-records')
 
@@ -81,6 +81,7 @@ class CategoryCreate:
 
 class CategoryDelete:
     pass
+
 
 class RecordDelete(DeleteView):
     model = Record

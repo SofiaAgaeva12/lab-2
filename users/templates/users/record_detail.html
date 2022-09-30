@@ -7,7 +7,9 @@
         <p>{{record.summary}}</p>
         <img src="{{ record.image.url }}">
      <p>{{ record.created_at }}</p>
+     {% if user.is_staff %}
      <a href="{{record.pk}}/update-status">Update status</a>
+     {% endif %}
     </div>
 {% if record.status == 'n' %}
     <a href="{{record.pk}}/delete">Удалить заявку?</a>

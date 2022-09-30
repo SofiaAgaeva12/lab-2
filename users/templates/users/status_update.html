@@ -5,12 +5,16 @@
     <div class="center">
         {% if user.is_staff %}
             <h1>Change status</h1>
+        {% if record.status == 'n' %}
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div style="">{{ form.as_p }}</div>
+    <div style="margin-top: 150px">{{ form.as_p }}</div>
     <button type="submit">Загрузить</button>
 </form>
+        {% else %}
+        <div style="margin-top: 150px"><p>Нельзя сменить статус с «Принято в работу» или «Выполнено»</p></div>
 
+        {% endif %}
         {% endif %}
     </div>
 
