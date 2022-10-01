@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
-from users.models import Record
+from users.models import Record, Category
 
 
 class SignupForm(UserCreationForm):
@@ -26,3 +26,14 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'username', 'email', 'password1', 'password2')
+
+
+class StatusUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Record
+        fields = ['status']
+
+
+class DeleteCategoryForm(forms.Form):
+    name = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)

@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    <div class="section-seperator">
+        <div class="content-md container">
+            <div class="row margin-b-40">
+                <div class="col-sm-6">
+                    <h2>Удаление категории</h2>
+                    <p>Выберите категорию ниже и нажмите кнопку "Удалить"</p>
+                </div>
+            </div>
+            <!--// end row -->
+
+            <div class="row">
+                <div class="col-md-5 col-sm-7">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="margin-b-10">
+                            {{form.as_p}}
+                        </div>
+                        <button style="margin-top: 40px;" type="submit"
+                                class="btn-theme btn-theme-sm btn-base-bg text-uppercase">Удалить
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!--// end row -->
+        </div>
+    </div>
+
+{% endblock %}

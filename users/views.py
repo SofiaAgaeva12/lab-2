@@ -1,11 +1,11 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
-from .forms import SignupForm
+from .forms import SignupForm, StatusUpdateForm, DeleteCategoryForm
 from .models import Record, Category
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
@@ -55,7 +55,6 @@ class RecordDetailView(DetailView):
 
 
 class RecordCreate(CreateView):
-
     model = Record
     fields = ['title', 'summary', 'category', 'image']
     success_url = reverse_lazy('my-records')
@@ -65,22 +64,6 @@ class RecordCreate(CreateView):
         fields.user = self.request.user
         fields.save()
         return super().form_valid(form)
-
-
-class StatusUpdate(PermissionRequiredMixin, UpdateView):
-    permission_required = 'users.can_mark_returned'
-    model = Record
-    fields = ['status', 'comment', 'add_image']
-    template_name = 'users/status_update.html'
-
-    def get_field(self, form_class=None):
-        form = super(StatusUpdate, self).get_form(form_class)
-        form.fields['comment'].widget.attrs['style'] = 'resize: none;'
-        form.fields['add_image'].required = True
-        form.fields['comment'].required = True
-
-        return form
-    # success_url = reverse_lazy('update-status')
 
 
 class CategoryCreate(CreateView):
@@ -114,9 +97,6 @@ class LoanedRecordsByUserListView(LoginRequiredMixin, ListView):
     model = Record
     template_name = 'users/record_list_user_all.html'
 
-    def get_queryset(self):
-        return Record.objects.filter(user=self.request.user).Record_by('created_at')
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs, )
         context['filter'] = RecordFilter(self.request.GET, queryset=self.get_queryset())
@@ -131,13 +111,9 @@ def main_context():
 
 
 class MainView(ListView):
-
     model = Record
     template_name = 'users/main.html'
     paginate_by = 4
-
-    def get_queryset(self):
-        return Record.objects.Record_by('created_at')
 
     def get_context_data(self, **kwargs):
         counter = Record.objects.filter(status='a').count()
@@ -147,12 +123,8 @@ class MainView(ListView):
 
 
 class AllRecordsView(ListView):
-
     model = Record
     template_name = 'users/all_records.html'
-
-    def get_queryset(self, **kwargs):
-        return Record.objects.Record_by('created_at')
 
     def get_context_data(self, **kwargs):
         data = Record.objects.all()
@@ -160,3 +132,76 @@ class AllRecordsView(ListView):
         return context
 
 
+@login_required
+@permission_required('users.can_mark_returned')
+def statuschange(request, pk):
+    record = get_object_or_404(Record, pk=pk)
+    old_status = record.status
+    if request.method == 'POST':
+        form = StatusUpdateForm(request.POST)
+        if form.is_valid():
+            record.status = form.cleaned_data['status']
+            if record.status == 'p':
+                return redirect('complete-record', pk)
+            elif old_status == 'a' or old_status == 'p':
+                return HttpResponse('<h1>Смена статуса с «Принято в работу» или «Выполнено» невозможна</h1>')
+            elif record.status == 'a':
+                return redirect('accepted-record', pk)
+            else:
+                record.save()
+            return HttpResponseRedirect(reverse('all-records'))
+    else:
+        form = StatusUpdateForm()
+    return render(request, 'users/status_update.html', {'form': form, 'record': record})
+
+
+class AcceptedStatusChange(PermissionRequiredMixin, UpdateView):
+    permission_required = 'users.can_mark_returned'
+    model = Record
+    fields = ['status', 'comment']
+    initial = {'status': 'a'}
+    success_url = '/'
+    template_name = 'users/status_update.html'
+
+    def get_form(self, form_class=None):
+        form = super(AcceptedStatusChange, self).get_form(form_class)
+        form.fields['comment'].required = True
+        form.fields['status'].disabled = True
+        return form
+
+
+class CompleteStatusChange(PermissionRequiredMixin, UpdateView):
+    permission_required = 'users.can_mark_returned'
+    model = Record
+    fields = ['status', 'design']
+    initial = {'status': 'p'}
+    success_url = '/'
+    template_name = 'users/status_update.html'
+
+    def get_form(self, form_class=None):
+        form = super(CompleteStatusChange, self).get_form(form_class)
+        form.fields['design'].required = True
+        form.fields['status'].disabled = True
+        return form
+
+
+class CategoryAdd(PermissionRequiredMixin, CreateView):
+    permission_required = 'users.can_mark_returned'
+    model = Category
+    fields = ['name']
+    template_name = 'delete_category.html'
+    success_url = '/'
+
+
+@login_required
+@permission_required('app.can_change_status')
+def deletecategory(request):
+    if request.method == 'POST':
+        form = DeleteCategoryForm(request.POST)
+        if form.is_valid():
+            name = Category.objects.get(name=form.cleaned_data['name'])
+            name.delete()
+            return HttpResponseRedirect(reverse('all-records'))
+    else:
+        form = DeleteCategoryForm()
+    return render(request, 'delete_category.html', {'form': form})

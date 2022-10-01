@@ -10,7 +10,7 @@ class Category(models.Model):
     """
     Model representing a category of record (e.g. ).
     """
-    name = models.CharField(max_length=200, help_text="Enter a category of record")
+    name = models.CharField(max_length=200, help_text="Enter a category of record", unique=True)
 
     def __str__(self):
         """
@@ -28,14 +28,16 @@ class Record(models.Model):
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the record")
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False)
 
-    category = models.ManyToManyField(Category, help_text="Select a genre for this book")
+    category = models.ForeignKey(Category, to_field='name', help_text='Категория заявки', blank=False,
+                                 on_delete=models.CASCADE)
+
     image = models.ImageField(upload_to='media/images/%Y-%m-%d/',
                               validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'bmp'])])
     created_at = models.DateTimeField(auto_now_add=True, db_index=True,
                                       verbose_name='Опубликовано')
 
     comment = models.TextField(blank=True, help_text="Комментарий к записи")
-    add_image = models.ImageField(blank=True, upload_to='media/images/%Y-%m-%d/')
+    design = models.ImageField(blank=True, upload_to='media/images/%Y-%m-%d/')
     LOAN_STATUS = (
         ('n', 'Новая'),
         ('p', 'Выполнено'),
