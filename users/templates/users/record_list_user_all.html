@@ -13,10 +13,11 @@
     <div style="">
         <h2><a href="{% url 'record-detail' r.pk %}">{{ r.title }}</a></h2>
         <p>{{ r.created_at }}</p>
+        <p>{{ r.summary }}</p>
         {% for doc in r.category.all %}
         <p>{{doc.name}}</p>
         {% endfor %}
-        <img src="{{ r.image.url }}">
+        <p>{{ r.status }}</p>
     </div>
     {% endfor %}
 </div>
