@@ -189,12 +189,12 @@ class CategoryAdd(PermissionRequiredMixin, CreateView):
     permission_required = 'users.can_mark_returned'
     model = Category
     fields = ['name']
-    template_name = 'delete_category.html'
+    template_name = 'users/create_category.html'
     success_url = '/'
 
 
 @login_required
-@permission_required('app.can_change_status')
+@permission_required('users.can_mark_returned')
 def deletecategory(request):
     if request.method == 'POST':
         form = DeleteCategoryForm(request.POST)
@@ -204,4 +204,4 @@ def deletecategory(request):
             return HttpResponseRedirect(reverse('all-records'))
     else:
         form = DeleteCategoryForm()
-    return render(request, 'delete_category.html', {'form': form})
+    return render(request, 'users/delete_category.html', {'form': form})

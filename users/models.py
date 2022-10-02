@@ -18,6 +18,9 @@ class Category(models.Model):
         """
         return self.name
 
+    class Meta:
+        permissions = (("can_mark_returned", "Set record as returned"),)
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)

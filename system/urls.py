@@ -23,7 +23,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', user_views.home, name='home'),
+    path('catalog/', user_views.home, name='home'),
 
     path('signup/', user_views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
@@ -52,8 +52,8 @@ urlpatterns += [
     path('record/<int:pk>/complete-order/', user_views.CompleteStatusChange.as_view(), name='complete-record'),
     path('record/<int:pk>/accepted-order/', user_views.AcceptedStatusChange.as_view(), name='accepted-record'),
 
-    path('all-records/add', user_views.CategoryAdd.as_view(), name='add-category'),
-    path('all-records/delete', user_views.deletecategory, name='delete-category'),
+    path('all-records/add-category', user_views.CategoryAdd.as_view(), name='add-category'),
+    path('all-records/delete-category', user_views.deletecategory, name='delete-category'),
 ]
 
 if settings.DEBUG:

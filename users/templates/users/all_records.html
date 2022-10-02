@@ -3,8 +3,9 @@
 {% block content %}
 <h1>Records</h1>
 
-<a href="{{ all-records/add }}">Create category</a>
-<a href="{{ all-records/delete }}">Delete category</a>
+ <a href="{% url 'delete-category' %}">Удалить категорию</a>
+
+ <a href="{% url 'add-category' %}">Добавить категорию</a>
 
 <div style="display: flex; gap: 40px; flex-wrap: wrap">{% for r in data %}
     <div>
