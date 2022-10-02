@@ -3,18 +3,47 @@
 {% block content %}
 
  <div style="">
-        <h1>>{{ record.title }}</h1>
-        <p>{{record.summary}}</p>
-        <img src="{{ record.image.url }}">
+        <h1 class="margin-b-20">{{ record.title }}</h1>
+        <p class="font-18 margin-b-20">{{record.summary}}</p>
+        <img src="{{ record.image.url }}" class="margin-b-20">
      <p>{{ record.created_at }}</p>
      {% if user.is_staff %}
-     {% if record.status == 'n' %}
-     <a href="{{record.pk}}/update-status">Update status</a>
+
+      <div class="tab_container">
+                            <div class="t-link-box" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                                 aria-controls="collapseOne">
+
+{% if record.status == 'n' %}
+                                <hr>
+                                <div class="t-name">
+                                    <h5>
+                                        <a href="{{record.pk}}/update-status" class="a2">Update status</a>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                                 aria-expanded="false" aria-controls="collapseTwo">
+
+                                <hr>
+                                <div class="t-name">
+                                    <h5>
+                                        <a href="{{record.pk}}/delete" class="a2">Удалить заявку?</a>
+                                    </h5>
+                                </div>
+                            </div>
+
     </div>
-    <a href="{{record.pk}}/delete">Удалить заявку?</a>
+
 {% endif %}
 {% else %}
-<p>Заявка принята в работу или выполнена.</p>
+                                <hr>
+                                <div class="t-name">
+                                    <h5>
+                                        Заявка принята в работу или выполнена.
+                                    </h5>
+                                </div>
+                            </div>
+
 
 
 

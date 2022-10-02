@@ -1,12 +1,53 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-    <br>
-    <div class="" role="alert">
-        <h2 style="text-align: center;">Logged out!</h2>
-    </div>
+    <section class="trending_section layout_padding">
+    <div id="accordion">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="detail-box">
+                        <div class="heading_container">
+                        <div class="tab_container">
+                            <div class="">
+                                <h1>Logged out!</h1>
+                                </div>
+                            <div class="t-link-box" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                                 aria-controls="collapseOne">
 
-    <h3>Login again?</h3>
-    <a href="{% url 'login' %}">Login</a> <br>
-    <a href="{% url 'home' %}">Or go back to home-page.</a>
+
+                                <div class="number">
+                                    <h5>
+                                        01
+                                    </h5>
+                                </div>
+                                <hr>
+                                <div class="t-name">
+                                    <h5>
+                                        <a href="{% url 'login' %}">Login</a>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="t-link-box collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                                 aria-expanded="false" aria-controls="collapseTwo">
+                                <div class="number">
+                                    <h5>
+                                        02
+                                    </h5>
+                                </div>
+                                <hr>
+                                <div class="t-name">
+                                    <h5>
+                                        <a href="{% url 'home' %}">Or go back to home-page.</a>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock content %}

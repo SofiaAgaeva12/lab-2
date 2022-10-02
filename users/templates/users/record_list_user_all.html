@@ -1,25 +1,50 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
+<section class="contact_section">
+    <div class="container">
+      <div class="block-center">
+        <h1 class="">
+         Records
+        </h1>
+      </div>
 
-<h1>Records</h1>
 <h4><a class="a2" href="{% url 'main-page' %}">Главная</a></h4>
-<form method="GET">
-    {{ filter.form }}
-    <button type="submit" class="btn btn-primary">Фильтр</button>
-</form>
 
-<div style="display: flex; gap: 30px; flex-wrap: wrap">{% for r in filter.qs %}
+
+        <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <form method="GET">
+              <div>{{ filter.form }}</div>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary">Фильтр</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+<div class="">
+      <div class="">
+        <div class="col-md-6">
+<div style="display: flex; gap: 40px; flex-wrap: wrap">{% for r in filter.qs %}
     <div style="">
         <h2><a href="{% url 'record-detail' r.pk %}">{{ r.title }}</a></h2>
-        <p>{{ r.created_at }}</p>
-        <p>{{ r.summary }}</p>
+        <p class="font-18">{{ r.created_at }}</p>
+        <p class="font-18">{{ r.summary }}</p>
         {% for doc in r.category.all %}
-        <p>{{doc.name}}</p>
+        <p class="font-18">{{doc.name}}</p>
         {% endfor %}
-        <p>{{ r.status }}</p>
+        <p class="font-18">{{ r.status }}</p>
     </div>
     {% endfor %}
 </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</section>
 
 {% endblock %}

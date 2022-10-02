@@ -1,14 +1,22 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-    <br>
-    <div role="alert">
-        <h2 style="text-align: center;">Sign Up</h2>
+
+ <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="block-center">
+        <h2 class="">
+         Sign Up
+        </h2>
+      </div>
+
     </div>
-    <br>
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
+    <div class="container">
+      <div class="row block-center">
+        <div class="col-md-6">
+          <form method="post">
+              {% csrf_token %}
+            {% for field in form %}
         <div>
             {{ field.label }}<br>
             {{ field }}
@@ -20,6 +28,12 @@
             {% endfor %}
         </div>
         {% endfor %}
-        <button type="submit">Sign up</button>
-    </form>
-{% endblock content%}
+            <div class="d-flex block-center">
+               <button type="submit">Sign up</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

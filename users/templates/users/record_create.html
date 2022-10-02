@@ -2,11 +2,28 @@
 {% extends "users/base.html" %}
 
 {% block content %}
-<h1>Create Record</h1>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <!-- Выводим каждое поле формы в отдельном параграфе -->
-    <div style="">{{ form.as_p }}</div>
-    <button type="submit">Загрузить</button>
-</form>
+<section class="contact_section layout_padding">
+    <div class="container">
+      <div class="block-center">
+        <h2 class="">
+         Create Record
+        </h2>
+      </div>
+
+    </div>
+    <div class="container">
+      <div class="row block-center">
+        <div class="col-md-6">
+          <form method="GET">
+              {% csrf_token %}
+                {{ form.as_p }}
+            <div class="d-flex block-center">
+                <button type="submit" value="Submit">Загрузить</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
 {% endblock %}

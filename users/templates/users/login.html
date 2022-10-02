@@ -1,13 +1,40 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-  <br>
-  <div class="" role="alert">
-    <h2 style="text-align: center;">Login</h2>
-  </div>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-  </form>
-{% endblock content%}
+
+ <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="block-center">
+        <h2 class="">
+        Login
+        </h2>
+      </div>
+
+    </div>
+    <div class="container">
+      <div class="row block-center">
+        <div class="col-md-6">
+          <form method="post">
+              {% csrf_token %}
+            {% for field in form %}
+        <div>
+            {{ field.label }}<br>
+            {{ field }}
+            {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+            <div class="d-flex block-center">
+               <button type="submit">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
+
